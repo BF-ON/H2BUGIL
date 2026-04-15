@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>어린 왕자 Ch2 낭독학습 — ON 영어 천안</title>
+<script src="https://code.responsivevoice.org/responsivevoice.js?key=FREE"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Malgun Gothic','Apple SD Gothic Neo',sans-serif;background:#f5f7fa;color:#1a1a1a}
+.hd{background:#1F3864;color:#fff;padding:16px 18px;text-align:center}
+.hd h1{font-size:18px;margin-bottom:4px}
+.hd p{font-size:12px;opacity:.75}
+.ctrl{background:#fff;border-bottom:2px solid #2E75B6;padding:10px 14px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;position:sticky;top:0;z-index:50}
+button{padding:8px 15px;border:2px solid #2E75B6;border-radius:8px;background:#fff;color:#2E75B6;font-size:14px;cursor:pointer;font-family:inherit;font-weight:700;transition:all .15s}
+button:hover{background:#2E75B6;color:#fff}
+button.red{border-color:#C00000;color:#C00000}
+button.red:hover{background:#C00000;color:#fff}
+select{padding:7px 9px;border:2px solid #ccc;border-radius:8px;font-size:13px;font-family:inherit;background:#fff}
+.spd{display:flex;align-items:center;gap:6px;margin-left:auto;font-size:13px;color:#555}
+.voice-sel{display:flex;align-items:center;gap:6px;font-size:13px;color:#555}
+.prog-wrap{background:#fff;padding:8px 14px;border-bottom:1px solid #e0e0e0}
+.prog-bar{height:5px;background:#e0e0e0;border-radius:5px;overflow:hidden}
+.prog-fill{height:100%;background:#2E75B6;width:0;transition:width .4s}
+.prog-txt{font-size:11px;color:#888;margin-top:4px}
+.status{background:#EBF3FB;padding:8px 14px;font-size:13px;color:#1F3864;border-bottom:1px solid #c5d9ee;display:flex;align-items:center;gap:8px;min-height:34px}
+.dot{width:8px;height:8px;border-radius:50%;background:#aaa;flex-shrink:0;transition:background .3s}
+.dot.p{background:#2E75B6;animation:blink 1s infinite}
+.dot.d{background:#375623}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.body{padding:12px 14px 60px;max-width:780px;margin:0 auto}
+.part{font-size:11px;font-weight:700;color:#999;letter-spacing:.07em;text-transform:uppercase;padding:18px 0 7px;border-top:1px solid #ddd;margin-top:6px}
+.part:first-of-type{border-top:none;padding-top:4px}
+.card{background:#fff;border:2px solid #e5e5e5;border-radius:12px;padding:13px 14px;margin-bottom:9px;cursor:pointer;transition:all .2s}
+.card:hover{border-color:#9fbfe0;background:#f5faff}
+.card.playing{border-color:#2E75B6;background:#EBF3FB}
+.card.done{border-left:4px solid #375623;padding-left:11px}
+.row{display:flex;align-items:flex-start;gap:10px}
+.n{font-size:11px;font-weight:700;color:#bbb;min-width:20px;padding-top:4px}
+.card.playing .n{color:#2E75B6}
+.en{font-size:16px;line-height:1.72;flex:1;font-family:Georgia,'Times New Roman',serif}
+.card.playing .en{color:#1F3864}
+.pb{width:32px;height:32px;border-radius:50%;border:2px solid #ddd;background:#fff;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;transition:all .15s}
+.pb:hover{border-color:#2E75B6;background:#EBF3FB}
+.card.playing .pb{background:#2E75B6;border-color:#2E75B6;color:#fff}
+.ko{font-size:13px;color:#555;line-height:1.65;margin-top:9px;padding-top:9px;border-top:1px solid #eee;display:none}
+.ko.show{display:block}
+.kws{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}
+.kw{font-size:11px;padding:2px 8px;border-radius:20px;background:#FFFBE6;color:#7B3F00;border:1px solid #f0c060}
+</style>
+</head>
+<body>
+
+<div class="hd">
+  <h1>The Little Prince — Chapter 2</h1>
+  <p>북일여고 2학년 영어 내신 대비 &nbsp;|&nbsp; ON 영어 천안</p>
+</div>
+
+<div class="ctrl">
+  <button id="bPlay" onclick="playAll()">&#9654; 전체재생</button>
+  <button id="bPause" onclick="togglePause()" style="display:none">&#9646;&#9646; 일시정지</button>
+  <button class="red" onclick="stopAll()" style="padding:8px 12px">&#9632; 정지</button>
+  <button onclick="playPrev()" style="padding:8px 12px">&#8592;</button>
+  <button onclick="playNext()" style="padding:8px 12px">&#8594;</button>
+  <button id="bKo" onclick="toggleKo()">해석 보기</button>
+  <div class="voice-sel">
+    목소리
+    <select id="voiceSel" onchange="changeVoice(this.value)">
+      <option value="UK English Female">영국 여성</option>
+      <option value="UK English Male">영국 남성</option>
+      <option value="US English Female" selected>미국 여성</option>
+      <option value="Australian Female">호주 여성</option>
+    </select>
+  </div>
+  <div class="spd">
+    속도
+    <select id="spdSel" onchange="spd=parseFloat(this.value)">
+      <option value="0.7">0.7x</option>
+      <option value="0.85">0.85x</option>
+      <option value="1" selected>1.0x</option>
+      <option value="1.15">1.15x</option>
+    </select>
+  </div>
+</div>
+
+<div class="prog-wrap">
+  <div class="prog-bar"><div class="prog-fill" id="pFill"></div></div>
+  <div class="prog-txt" id="pTxt">0 / 29 문장 완료</div>
+</div>
+<div class="status"><div class="dot" id="dot"></div><span id="stxt">문장을 클릭하거나 전체재생을 누르세요</span></div>
+
+<div class="body" id="body"></div>
+
+<script>
+var DATA=[
+["Part 1 — 사막 추락과 고립",[
+["So I lived my life alone, without anyone that I could really talk to, until I had an accident with my plane in the Desert of Sahara, six years ago.","그래서 나는 혼자 살았다, 진정으로 대화할 수 있는 사람 하나 없이, 6년 전 사하라 사막에서 비행기 사고를 겪기 전까지는.",[]],
+["Something was broken in my engine.","내 엔진의 무언가가 고장났다.",[]],
+["And as I had with me neither a mechanic nor any passengers, I set myself to attempt the difficult repairs all alone.","정비사도 없고 승객도 없었기 때문에, 나는 혼자서 어려운 수리를 시도하기로 마음먹었다.",["as = because","neither A nor B","set myself to attempt = began trying"]],
+["It was a question of life or death for me: I had scarcely enough drinking water to last a week.","그것은 나에게 생사의 문제였다. 일주일을 버틸 마실 물도 거의 없었다.",["a question of life or death","scarcely = only just"]],
+["The first night, then, I went to sleep on the sand, a thousand miles from any human habitation.","그래서 첫날 밤, 나는 모래 위에서 잠이 들었다, 인간의 어떤 거주지에서도 천 마일이나 떨어진 곳에서.",["habitation = 거주지"]],
+["I was more isolated than a shipwrecked sailor on a raft in the middle of the ocean.","나는 대양 한가운데 뗏목 위에 있는 난파선 선원보다 더 고립되어 있었다.",["more isolated than ~"]],
+["Thus you can imagine my amazement, at sunrise, when I was awakened by an odd little voice.","그러니 해가 뜰 무렵 이상한 작은 목소리에 잠을 깼을 때 나의 놀라움을 여러분도 상상할 수 있을 것이다.",["amazement = great surprise"]]
+]],
+["Part 2 — 어린 왕자의 등장",[
+["I jumped to my feet, completely thunderstruck.","나는 완전히 벼락을 맞은 듯 충격을 받아 벌떡 일어섰다.",["jumped to my feet = stood up suddenly","thunderstruck = completely shocked"]],
+["I blinked my eyes hard.","나는 눈을 힘껏 깜빡였다.",[]],
+["I looked carefully all around me.","나는 주위를 조심스럽게 살펴보았다.",[]],
+["And I saw a most extraordinary small person, who stood there examining me with great seriousness.","그리고 나는 아주 놀라운 작은 사람을 보았는데, 그는 거기 서서 매우 진지하게 나를 살펴보고 있었다.",["who = 관계대명사 (선행사: person)"]],
+["Now I stared at this sudden apparition with my eyes fairly starting out of my head in astonishment.","이제 나는 눈이 튀어나올 것처럼 놀라서 이 갑작스러운 출현을 바라보았다.",["apparition = ghost","eyes starting out of my head = 눈이 튀어나올 것 같은"]],
+["And yet my little man seemed neither to be straying uncertainly among the sands, nor to be fainting from fatigue or hunger or thirst or fear.","그런데도 나의 작은 사람은 모래밭을 헤매는 것도, 피로나 배고픔, 갈증, 공포로 기절할 것 같지도 않았다.",["neither A nor B","straying uncertainly = getting lost"]],
+["Nothing about him gave any suggestion of a child lost in the middle of the desert, a thousand miles from any human habitation.","그의 어디에서도 사막 한가운데에서 길을 잃은, 거주지에서 천 마일이나 떨어진 아이의 모습은 찾아볼 수 없었다.",[]]
+]],
+["Part 3 — 양을 그려달라는 요청",[
+["And in answer he repeated, very slowly, as if he were speaking of a matter of great consequence: If you please, draw me a sheep.","그리고 대답으로 그는 매우 천천히 반복했다, 마치 매우 중요한 문제에 대해 말하는 것처럼: 제발, 양을 그려 줘요.",["as if + 가정법 (were)","a matter of great consequence = importance"]],
+["When a mystery is too overpowering, one dare not disobey.","수수께끼가 너무 압도적일 때, 사람은 감히 거역할 수가 없다.",["overpowering = overwhelming"]],
+["Absurd as it might seem to me, a thousand miles from any human habitation and in danger of death, I took out of my pocket a sheet of paper and my fountain-pen.","아무리 황당하게 보일지라도, 죽을 위기에 처해 있으면서, 나는 주머니에서 종이 한 장과 만년필을 꺼냈다.",["Absurd as = 양보구문"]],
+["But then I remembered how my studies had been concentrated on geography, history, arithmetic, and grammar, and I told the little chap that I did not know how to draw.","하지만 나는 내 공부가 지리, 역사, 산수, 문법에 집중되어 있었다는 것을 떠올렸고, 그 꼬맹이에게 나는 그림을 그릴 줄 모른다고 말했다.",["chap = boy","간접화법 시제일치"]]
+]],
+["Part 4 — 거부된 양 그림들",[
+["But I had never drawn a sheep. So I drew for him one of the two pictures I had drawn so often.","하지만 나는 양을 그려본 적이 없었다. 그래서 나는 내가 자주 그렸던 두 그림 중 하나를 그에게 그려 주었다.",["had never drawn = 과거완료"]],
+["And I was astounded to hear the little fellow say: No! I do not want an elephant inside a boa constrictor. An elephant is very cumbersome.","그리고 나는 그 꼬마가 보아 뱀 안의 코끼리는 원하지 않는다고 말하는 것을 듣고 깜짝 놀랐다.",["cumbersome = unmanageable"]],
+["He looked at it carefully, then he said: No. This sheep is already very sickly. Make me another.","그는 그림을 주의 깊게 바라보더니 말했다. 아니요. 이 양은 이미 매우 아파 보여요.",["sickly = ill"]],
+["My friend smiled gently and indulgently. You see yourself, he said, that this is not a sheep. This is a ram. It has horns.","나의 친구는 부드럽고 관대하게 미소를 지었다. 직접 보면 알잖아요. 이건 숫양이에요.",["indulgently = kindly","ram = male sheep"]],
+["By this time my patience was exhausted, because I was in a hurry to start taking my engine apart. So I tossed off this drawing.","이쯤 되자 인내심이 바닥났다. 그래서 나는 이 그림을 대충 그려 넘겼다.",["tossed off = made quickly"]]
+]],
+["Part 5 — 상자 속의 양과 만남",[
+["This is only his box. The sheep you asked for is inside.","이건 그냥 상자예요. 당신이 부탁한 양은 안에 있어요.",[]],
+["I was very surprised to see a light break over the face of my young judge.","나는 나의 어린 심판자의 얼굴에 환한 빛이 퍼지는 것을 보고 매우 놀랐다.",[]],
+["That is exactly the way I wanted it! Do you think that this sheep will have to have a great deal of grass?","바로 이거예요! 이 양이 풀을 많이 먹어야 할까요?",[]],
+["There will surely be enough grass for him. It is a very small sheep that I have given you.","분명히 충분한 풀이 있을 거예요. 내가 당신에게 준 것은 매우 작은 양이에요.",["It is ~ that = 강조구문"]],
+["He bent his head over the drawing: Not so small. Look! He has gone to sleep.","그는 그림 위로 고개를 숙였다. 그렇게 작지는 않은데. 봐요! 잠들어 버렸어요.",[]],
+["And that is how I made the acquaintance of the little prince.","그리고 그렇게 나는 어린 왕자를 알게 되었다.",["make the acquaintance of = Meet"]]
+]]
+];
+
+var all=[],cur=-1,playing=false,paused=false,autonext=false,spd=1,showKo=false;
+var voiceName="US English Female";
+
+(function build(){
+  var wrap=document.getElementById('body'),gi=0;
+  DATA.forEach(function(p){
+    var lbl=document.createElement('div');lbl.className='part';lbl.textContent=p[0];wrap.appendChild(lbl);
+    p[1].forEach(function(s){
+      var i=gi++;all.push(s);
+      var card=document.createElement('div');card.className='card';card.id='c'+i;
+      card.onclick=function(){autonext=false;go(i);};
+      var row=document.createElement('div');row.className='row';
+      var n=document.createElement('div');n.className='n';n.textContent=i+1;
+      var en=document.createElement('div');en.className='en';en.textContent=s[0];
+      var pb=document.createElement('div');pb.className='pb';pb.id='pb'+i;pb.textContent='▶';
+      pb.onclick=function(e){e.stopPropagation();autonext=false;go(i);};
+      row.appendChild(n);row.appendChild(en);row.appendChild(pb);card.appendChild(row);
+      if(s[2]&&s[2].length){
+        var kws=document.createElement('div');kws.className='kws';
+        s[2].forEach(function(k){var sp=document.createElement('span');sp.className='kw';sp.textContent=k;kws.appendChild(sp);});
+        card.appendChild(kws);
+      }
+      var ko=document.createElement('div');ko.className='ko';ko.id='k'+i;ko.textContent=s[1];
+      card.appendChild(ko);wrap.appendChild(card);
+    });
+  });
+  document.getElementById('pTxt').textContent='0 / '+all.length+' 문장 완료';
+})();
+
+function setSt(txt,cls){
+  document.getElementById('stxt').textContent=txt;
+  document.getElementById('dot').className='dot'+(cls?' '+cls:'');
+}
+function clearC(){
+  document.querySelectorAll('.card').forEach(function(c){c.classList.remove('playing');});
+  document.querySelectorAll('.pb').forEach(function(b){b.textContent='▶';});
+}
+function updProg(){
+  var done=document.querySelectorAll('.card.done').length,tot=all.length;
+  document.getElementById('pFill').style.width=Math.round(done/tot*100)+'%';
+  document.getElementById('pTxt').textContent=done+' / '+tot+' 문장 완료';
+}
+
+function go(i){
+  responsiveVoice.cancel();
+  cur=i;clearC();
+  var card=document.getElementById('c'+i),pb=document.getElementById('pb'+i);
+  card.classList.add('playing');pb.textContent='⏸';
+  card.scrollIntoView({behavior:'smooth',block:'nearest'});
+  if(showKo)document.getElementById('k'+i).classList.add('show');
+  setSt('읽는 중 ('+(i+1)+' / '+all.length+')','p');
+
+  responsiveVoice.speak(all[i][0], voiceName, {
+    rate: spd,
+    onend: function(){
+      card.classList.remove('playing');card.classList.add('done');pb.textContent='✓';
+      if(showKo)document.getElementById('k'+i).classList.add('show');
+      updProg();
+      if(autonext&&playing&&!paused){
+        if(i+1<all.length) setTimeout(function(){go(i+1);},350);
+        else{
+          playing=false;autonext=false;
+          document.getElementById('bPlay').style.display='';
+          document.getElementById('bPause').style.display='none';
+          setSt('전체 재생 완료!','d');
+        }
+      }else setSt('완료: 문장 '+(i+1),'d');
+    },
+    onerror: function(){card.classList.remove('playing');pb.textContent='▶';setSt('오류 — 다시 시도해주세요','');}
+  });
+}
+
+function playAll(){
+  playing=true;paused=false;autonext=true;
+  document.getElementById('bPlay').style.display='none';
+  document.getElementById('bPause').style.display='';
+  document.getElementById('bPause').textContent='⏸ 일시정지';
+  go((cur>=0&&cur<all.length-1)?cur+1:0);
+}
+function togglePause(){
+  var b=document.getElementById('bPause');
+  if(paused){
+    paused=false;
+    responsiveVoice.resume();
+    b.textContent='⏸ 일시정지';setSt('재생 중...','p');
+  }else{
+    paused=true;
+    responsiveVoice.pause();
+    b.textContent='▶ 계속';setSt('일시정지됨','');
+  }
+}
+function stopAll(){
+  responsiveVoice.cancel();
+  playing=false;paused=false;autonext=false;clearC();
+  document.getElementById('bPlay').style.display='';
+  document.getElementById('bPause').style.display='none';
+  setSt('정지됨','');
+}
+function playPrev(){if(cur>0){autonext=playing;go(cur-1);}}
+function playNext(){if(cur<all.length-1){autonext=playing;go(cur+1);}}
+function changeVoice(v){voiceName=v;responsiveVoice.cancel();}
+function toggleKo(){
+  showKo=!showKo;
+  document.querySelectorAll('.ko').forEach(function(el){showKo?el.classList.add('show'):el.classList.remove('show');});
+  document.getElementById('bKo').textContent=showKo?'해석 숨기기':'해석 보기';
+}
+</script>
+</body>
+</html>
